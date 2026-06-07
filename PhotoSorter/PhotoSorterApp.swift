@@ -10,9 +10,14 @@ import SwiftData
 
 @main
 struct PhotoSorterApp: App {
+    @State private var photoLibrary = PhotoLibrary()
+
     var sharedModelContainer: ModelContainer = {
         let schema = Schema([
             Item.self,
+            PhotoFeature.self,
+            GeocodeCache.self,
+            SortPreferences.self,
         ])
         let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
 
@@ -26,6 +31,7 @@ struct PhotoSorterApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .environment(photoLibrary)
         }
         .modelContainer(sharedModelContainer)
     }

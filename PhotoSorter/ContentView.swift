@@ -7,55 +7,55 @@
 
 import SwiftUI
 import SwiftData
+import Photos
 
 struct ContentView: View {
-    @Environment(\.modelContext) private var modelContext
-    @Query private var items: [Item]
+    @Environment(PhotoLibrary.self) private var library
+    @State private var showingSortSettings = false
 
     var body: some View {
-        NavigationSplitView {
-            List {
-                ForEach(items) { item in
-                    NavigationLink {
-                        Text("Item at \(item.timestamp, format: Date.FormatStyle(date: .numeric, time: .standard))")
-                    } label: {
-                        Text(item.timestamp, format: Date.FormatStyle(date: .numeric, time: .standard))
+        NavigationStack {
+            content
+                .navigationTitle("Photos")
+                .toolbar {
+                    ToolbarItem(placement: .topBarTrailing) {
+                        Button {
+                            showingSortSettings = true
+                        } label: {
+                            Image(systemName: "slider.horizontal.3")
+                        }
                     }
                 }
-                .onDelete(perform: deleteItems)
-            }
-            .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    EditButton()
+                .sheet(isPresented: $showingSortSettings) {
+                    HierarchyPickerView()
                 }
-                ToolbarItem {
-                    Button(action: addItem) {
-                        Label("Add Item", systemImage: "plus")
-                    }
-                }
-            }
-        } detail: {
-            Text("Select an item")
+        }
+        .task {
+            await library.requestAccess()
         }
     }
 
-    private func addItem() {
-        withAnimation {
-            let newItem = Item(timestamp: Date())
-            modelContext.insert(newItem)
-        }
-    }
-
-    private func deleteItems(offsets: IndexSet) {
-        withAnimation {
-            for index in offsets {
-                modelContext.delete(items[index])
-            }
+    @ViewBuilder
+    private var content: some View {
+        switch library.status {
+        case .authorized, .limited:
+            PhotoGridView()
+        case .denied, .restricted:
+            ContentUnavailableView(
+                "Photo Access Denied",
+                systemImage: "photo.on.rectangle.angled",
+                description: Text("Enable photo access in Settings to sort your library.")
+            )
+        case .notDetermined:
+            ProgressView("Requesting access…")
+        @unknown default:
+            EmptyView()
         }
     }
 }
 
 #Preview {
     ContentView()
-        .modelContainer(for: Item.self, inMemory: true)
+        .environment(PhotoLibrary())
+        .modelContainer(for: [Item.self, PhotoFeature.self, GeocodeCache.self, SortPreferences.self], inMemory: true)
 }
