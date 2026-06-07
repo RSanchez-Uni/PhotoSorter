@@ -31,7 +31,7 @@ struct SortedLibraryView: View {
                     description: Text("Try turning off the Favorites filter in Sort Settings.")
                 )
             } else {
-                HierarchyFolderView(buckets: buckets)
+                HierarchyPreviewView(buckets: buckets)
             }
         }
     }
