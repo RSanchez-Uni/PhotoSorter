@@ -34,8 +34,14 @@ final class PhotoLibrary: NSObject {
         }
         if isAuthorized {
             fetchAssets()
-            startPipeline()
+            startPipeline(wipeExisting: false)
         }
+    }
+
+    func reanalyzeAllPhotos() {
+        guard isAuthorized else { return }
+        fetchAssets()
+        startPipeline(wipeExisting: true)
     }
 
     private func fetchAssets() {
@@ -44,13 +50,16 @@ final class PhotoLibrary: NSObject {
         assets = PHAsset.fetchAssets(with: .image, options: options)
     }
 
-    private func startPipeline() {
+    private func startPipeline(wipeExisting: Bool) {
         guard let assets else { return }
         let identifiers = (0..<assets.count).map { assets.object(at: $0).localIdentifier }
         let coordinator = self.coordinator
         let resolver = self.resolver
         pipelineTask?.cancel()
         pipelineTask = Task.detached(priority: .background) {
+            if wipeExisting {
+                await coordinator.resetFeatures()
+            }
             await coordinator.extractFeatures(for: identifiers)
             let prioritized = await coordinator.collectGridKeyCounts(for: identifiers)
             await resolver.resolve(prioritizedGridKeys: prioritized)

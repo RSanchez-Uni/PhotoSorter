@@ -9,6 +9,7 @@ import SwiftData
 struct HierarchyPickerView: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(\.modelContext) private var modelContext
+    @Environment(PhotoLibrary.self) private var library
     @Query private var preferences: [SortPreferences]
 
     var body: some View {
@@ -36,6 +37,7 @@ struct HierarchyPickerView: View {
 
 private struct PreferencesForm: View {
     @Bindable var prefs: SortPreferences
+    @Environment(PhotoLibrary.self) private var library
 
     var body: some View {
         Form {
@@ -62,6 +64,16 @@ private struct PreferencesForm: View {
                 }
 
                 Toggle("Favorites Only", isOn: $prefs.favoritesOnly)
+            }
+
+            Section {
+                Button(role: .destructive) {
+                    library.reanalyzeAllPhotos()
+                } label: {
+                    Label("Re-analyze All Photos", systemImage: "arrow.clockwise")
+                }
+            } footer: {
+                Text("Wipes existing classifications and re-runs the content classifier on every photo. Useful after expanding the content mapping table.")
             }
         }
         .environment(\.editMode, .constant(.active))
