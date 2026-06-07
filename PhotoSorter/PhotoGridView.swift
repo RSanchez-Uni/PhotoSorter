@@ -17,8 +17,6 @@ struct PhotoGridView: View {
                 LazyVGrid(columns: columns, spacing: 2) {
                     ForEach(0..<assets.count, id: \.self) { index in
                         PhotoThumbnail(asset: assets.object(at: index))
-                            .aspectRatio(1, contentMode: .fill)
-                            .clipped()
                     }
                 }
                 .padding(2)
@@ -39,18 +37,20 @@ struct PhotoThumbnail: View {
     @State private var image: UIImage?
 
     var body: some View {
-        Group {
-            if let image {
-                Image(uiImage: image)
-                    .resizable()
-                    .scaledToFill()
-            } else {
-                Color.gray.opacity(0.2)
+        Color.gray.opacity(0.15)
+            .aspectRatio(1, contentMode: .fit)
+            .overlay {
+                if let image {
+                    Image(uiImage: image)
+                        .resizable()
+                        .scaledToFill()
+                }
             }
-        }
-        .task(id: asset.localIdentifier) {
-            image = await Self.loadThumbnail(for: asset)
-        }
+            .clipped()
+            .contentShape(Rectangle())
+            .task(id: asset.localIdentifier) {
+                image = await Self.loadThumbnail(for: asset)
+            }
     }
 
     private static func loadThumbnail(for asset: PHAsset) async -> UIImage? {

@@ -29,8 +29,6 @@ struct BucketPhotoGrid: View {
                             PhotoDetailView(asset: asset)
                         } label: {
                             PhotoThumbnail(asset: asset)
-                                .aspectRatio(1, contentMode: .fill)
-                                .clipped()
                         }
                         .buttonStyle(.plain)
                     }
