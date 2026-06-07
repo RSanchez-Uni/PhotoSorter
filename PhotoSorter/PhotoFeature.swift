@@ -13,8 +13,6 @@ final class PhotoFeature {
     var alternativeContentBuckets: [ContentBucket]
     var gridCellKey: String?
     var creationDate: Date?
-    var primaryPersonName: String?
-    var alternativePersonNames: [String]
     var isFavorite: Bool
     var extractedAt: Date
 
@@ -24,8 +22,6 @@ final class PhotoFeature {
         alternativeContentBuckets: [ContentBucket] = [],
         gridCellKey: String? = nil,
         creationDate: Date? = nil,
-        primaryPersonName: String? = nil,
-        alternativePersonNames: [String] = [],
         isFavorite: Bool = false,
         extractedAt: Date = .now
     ) {
@@ -34,8 +30,6 @@ final class PhotoFeature {
         self.alternativeContentBuckets = alternativeContentBuckets
         self.gridCellKey = gridCellKey
         self.creationDate = creationDate
-        self.primaryPersonName = primaryPersonName
-        self.alternativePersonNames = alternativePersonNames
         self.isFavorite = isFavorite
         self.extractedAt = extractedAt
     }

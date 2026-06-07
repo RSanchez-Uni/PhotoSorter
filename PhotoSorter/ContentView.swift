@@ -55,7 +55,10 @@ struct ContentView: View {
 }
 
 #Preview {
-    ContentView()
-        .environment(PhotoLibrary())
-        .modelContainer(for: [Item.self, PhotoFeature.self, GeocodeCache.self, SortPreferences.self], inMemory: true)
+    let schema = Schema([Item.self, PhotoFeature.self, GeocodeCache.self, SortPreferences.self])
+    let config = ModelConfiguration(schema: schema, isStoredInMemoryOnly: true)
+    let container = try! ModelContainer(for: schema, configurations: [config])
+    return ContentView()
+        .environment(PhotoLibrary(container: container))
+        .modelContainer(container)
 }

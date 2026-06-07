@@ -104,7 +104,7 @@ private struct HierarchyRow: View {
             } label: {
                 Text(prefs.locationGranularity.displayName)
             }
-        case .content, .people:
+        case .content:
             EmptyView()
         }
     }

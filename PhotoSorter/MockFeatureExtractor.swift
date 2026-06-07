@@ -16,10 +16,6 @@ enum MockFeatureExtractor {
         ("48.86_2.29", "FR", "France", "Paris", "Île-de-France"),
     ]
 
-    private static let mockPeople: [String?] = [
-        "Mom", "Dad", "Sam", "Jordan", "Taylor", nil, nil, nil,
-    ]
-
     static func extractFeature(for asset: PHAsset) -> PhotoFeature {
         let primary = ContentBucket.allCases.randomElement() ?? .other
         let alternatives = ContentBucket.allCases
@@ -28,7 +24,6 @@ enum MockFeatureExtractor {
             .prefix(Int.random(in: 0...3))
 
         let location = mockGridCells.randomElement()
-        let primaryPerson = mockPeople.randomElement() ?? nil
 
         return PhotoFeature(
             localIdentifier: asset.localIdentifier,
@@ -36,8 +31,6 @@ enum MockFeatureExtractor {
             alternativeContentBuckets: Array(alternatives),
             gridCellKey: location?.gridKey,
             creationDate: asset.creationDate,
-            primaryPersonName: primaryPerson,
-            alternativePersonNames: [],
             isFavorite: asset.isFavorite
         )
     }

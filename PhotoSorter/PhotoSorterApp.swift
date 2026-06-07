@@ -10,23 +10,25 @@ import SwiftData
 
 @main
 struct PhotoSorterApp: App {
-    @State private var photoLibrary = PhotoLibrary()
+    let sharedModelContainer: ModelContainer
+    @State private var photoLibrary: PhotoLibrary
 
-    var sharedModelContainer: ModelContainer = {
+    init() {
         let schema = Schema([
             Item.self,
             PhotoFeature.self,
             GeocodeCache.self,
             SortPreferences.self,
         ])
-        let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
-
+        let configuration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
         do {
-            return try ModelContainer(for: schema, configurations: [modelConfiguration])
+            let container = try ModelContainer(for: schema, configurations: [configuration])
+            self.sharedModelContainer = container
+            self._photoLibrary = State(initialValue: PhotoLibrary(container: container))
         } catch {
             fatalError("Could not create ModelContainer: \(error)")
         }
-    }()
+    }
 
     var body: some Scene {
         WindowGroup {
