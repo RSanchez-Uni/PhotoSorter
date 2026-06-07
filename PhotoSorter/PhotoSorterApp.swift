@@ -2,7 +2,7 @@
 //  PhotoSorterApp.swift
 //  PhotoSorter
 //
-//  Created by Jegs on 6/7/26.
+//  Created by Robert Sanchez on 6/7/26.
 //
 
 import SwiftUI

@@ -2,7 +2,7 @@
 //  ContentView.swift
 //  PhotoSorter
 //
-//  Created by Jegs on 6/7/26.
+//  Created by Robert Sanchez on 6/7/26.
 //
 
 import SwiftUI
@@ -16,7 +16,7 @@ struct ContentView: View {
     var body: some View {
         NavigationStack {
             content
-                .navigationTitle("Photos")
+                .navigationTitle("PhotoSorter")
                 .toolbar {
                     ToolbarItem(placement: .topBarTrailing) {
                         Button {
@@ -39,7 +39,7 @@ struct ContentView: View {
     private var content: some View {
         switch library.status {
         case .authorized, .limited:
-            PhotoGridView()
+            SortedLibraryView()
         case .denied, .restricted:
             ContentUnavailableView(
                 "Photo Access Denied",
