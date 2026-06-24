@@ -94,20 +94,9 @@ private struct FullPhotoView: View {
     }
 
     private static func load(asset: PHAsset) async -> UIImage? {
-        let options = PHImageRequestOptions()
-        options.deliveryMode = .highQualityFormat
-        options.isNetworkAccessAllowed = true
-        let size = CGSize(width: 1024, height: 1024)
-
-        return await withCheckedContinuation { continuation in
-            PHImageManager.default().requestImage(
-                for: asset,
-                targetSize: size,
-                contentMode: .aspectFit,
-                options: options
-            ) { uiImage, _ in
-                continuation.resume(returning: uiImage)
-            }
-        }
+        await asset.loadImage(
+            targetSize: CGSize(width: 1024, height: 1024),
+            contentMode: .aspectFit
+        )
     }
 }

@@ -54,20 +54,9 @@ struct PhotoThumbnail: View {
     }
 
     private static func loadThumbnail(for asset: PHAsset) async -> UIImage? {
-        let options = PHImageRequestOptions()
-        options.deliveryMode = .highQualityFormat
-        options.isNetworkAccessAllowed = true
-        options.resizeMode = .fast
-        let size = CGSize(width: 300, height: 300)
-        return await withCheckedContinuation { continuation in
-            PHImageManager.default().requestImage(
-                for: asset,
-                targetSize: size,
-                contentMode: .aspectFill,
-                options: options
-            ) { result, _ in
-                continuation.resume(returning: result)
-            }
-        }
+        await asset.loadImage(
+            targetSize: CGSize(width: 300, height: 300),
+            contentMode: .aspectFill
+        )
     }
 }

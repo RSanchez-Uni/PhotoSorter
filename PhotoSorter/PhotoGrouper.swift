@@ -139,6 +139,8 @@ private enum Tier {
     case month
     case day
 
+    private static let monthSymbols: [String] = DateFormatter().monthSymbols ?? []
+
     func groupKey(for feature: PhotoFeature, cacheByKey: [String: GeocodeCache]) -> (key: String, label: String, unknown: Bool) {
         switch self {
         case .content:
@@ -179,8 +181,7 @@ private enum Tier {
                 return ("unknown_month", "Unknown Month", true)
             }
             let month = Calendar.current.component(.month, from: date)
-            let monthSymbols = DateFormatter().monthSymbols ?? []
-            let name = (1...12).contains(month) ? monthSymbols[month - 1] : "\(month)"
+            let name = (1...12).contains(month) ? Self.monthSymbols[month - 1] : "\(month)"
             return ("month_\(month)", name, false)
 
         case .day:

@@ -55,7 +55,7 @@ struct ContentView: View {
 }
 
 #Preview {
-    let schema = Schema([Item.self, PhotoFeature.self, GeocodeCache.self, SortPreferences.self])
+    let schema = Schema([PhotoFeature.self, GeocodeCache.self, SortPreferences.self])
     let config = ModelConfiguration(schema: schema, isStoredInMemoryOnly: true)
     let container = try! ModelContainer(for: schema, configurations: [config])
     return ContentView()

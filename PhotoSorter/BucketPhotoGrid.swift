@@ -43,7 +43,6 @@ struct BucketPhotoGrid: View {
 
     private static func fetchAssets(identifiers: [String]) -> [PHAsset] {
         guard !identifiers.isEmpty else { return [] }
-        let result = PHAsset.fetchAssets(withLocalIdentifiers: identifiers, options: nil)
-        return (0..<result.count).map { result.object(at: $0) }
+        return PHAsset.fetchAssets(withLocalIdentifiers: identifiers, options: nil).allAssets
     }
 }

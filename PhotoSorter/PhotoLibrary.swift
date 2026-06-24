@@ -52,7 +52,7 @@ final class PhotoLibrary: NSObject {
 
     private func startPipeline(wipeExisting: Bool) {
         guard let assets else { return }
-        let identifiers = (0..<assets.count).map { assets.object(at: $0).localIdentifier }
+        let identifiers = assets.allAssets.map(\.localIdentifier)
         let coordinator = self.coordinator
         let resolver = self.resolver
         pipelineTask?.cancel()

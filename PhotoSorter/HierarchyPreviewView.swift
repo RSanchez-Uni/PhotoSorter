@@ -30,7 +30,7 @@ private struct BucketSection: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
             NavigationLink {
-                destination(for: bucket)
+                bucketDestination(bucket)
             } label: {
                 sectionHeader
             }
@@ -79,25 +79,12 @@ private struct BucketSection: View {
         } else {
             ForEach(bucket.children) { child in
                 NavigationLink {
-                    destination(for: child)
+                    bucketDestination(child)
                 } label: {
                     ChildBucketPreview(bucket: child, size: thumbSize)
                 }
                 .buttonStyle(.plain)
             }
-        }
-    }
-
-    @ViewBuilder
-    private func destination(for bucket: HierarchyBucket) -> some View {
-        if bucket.isLeaf {
-            BucketPhotoGrid(photoIdentifiers: bucket.photoIdentifiers)
-                .navigationTitle(bucket.label)
-                .navigationBarTitleDisplayMode(.inline)
-        } else {
-            HierarchyPreviewView(buckets: bucket.children)
-                .navigationTitle(bucket.label)
-                .navigationBarTitleDisplayMode(.inline)
         }
     }
 }

@@ -49,22 +49,7 @@ struct ContentClassifier: Sendable {
     }
 
     private func loadImage(for asset: PHAsset) async -> CGImage? {
-        let options = PHImageRequestOptions()
-        options.deliveryMode = .fastFormat
-        options.isNetworkAccessAllowed = true
-        options.resizeMode = .fast
-        let size = CGSize(width: 224, height: 224)
-
-        return await withCheckedContinuation { continuation in
-            PHImageManager.default().requestImage(
-                for: asset,
-                targetSize: size,
-                contentMode: .aspectFit,
-                options: options
-            ) { uiImage, _ in
-                continuation.resume(returning: uiImage?.cgImage)
-            }
-        }
+        await asset.loadCGImage(targetSize: CGSize(width: 224, height: 224))
     }
 
     private func isLikelySelfie(cgImage: CGImage) -> Bool {

@@ -12,26 +12,13 @@ struct HierarchyFolderView: View {
         List {
             ForEach(buckets) { bucket in
                 NavigationLink {
-                    destination(for: bucket)
+                    bucketDestination(bucket)
                 } label: {
                     BucketRow(bucket: bucket)
                 }
             }
         }
         .listStyle(.insetGrouped)
-    }
-
-    @ViewBuilder
-    private func destination(for bucket: HierarchyBucket) -> some View {
-        if bucket.isLeaf {
-            BucketPhotoGrid(photoIdentifiers: bucket.photoIdentifiers)
-                .navigationTitle(bucket.label)
-                .navigationBarTitleDisplayMode(.inline)
-        } else {
-            HierarchyFolderView(buckets: bucket.children)
-                .navigationTitle(bucket.label)
-                .navigationBarTitleDisplayMode(.inline)
-        }
     }
 }
 
